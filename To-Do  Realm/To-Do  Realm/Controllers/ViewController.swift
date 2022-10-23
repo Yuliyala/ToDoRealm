@@ -7,11 +7,6 @@
 
 import UIKit
 
-struct Task {
-    var title: String
-    var detail: String
-    var isDone: Bool
-}
 
 class ViewController: UIViewController, AddTaskViewControllerDelegate  {
     
