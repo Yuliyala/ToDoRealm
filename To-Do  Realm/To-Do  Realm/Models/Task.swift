@@ -10,9 +10,17 @@ import RealmSwift
 
 
 struct Task {
+    let id: String
     var title: String
     var detail: String
     var isDone: Bool
+    
+    init(model: TaskRealmModel) {
+        id = model.id.stringValue
+        title = model.title
+        detail = model.detail
+        isDone = model.isDone
+    }
 }
 
 class TaskRealmModel: Object {
@@ -20,8 +28,6 @@ class TaskRealmModel: Object {
     @Persisted var title = ""
     @Persisted var detail = ""
     @Persisted var isDone: Bool = false
-    
-   
     
     static func create(title: String, detail: String, isDone: Bool) -> TaskRealmModel {
         let model = TaskRealmModel()

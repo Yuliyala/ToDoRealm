@@ -13,7 +13,7 @@ protocol AddTaskViewControllerDelegate: AnyObject {
 
 class AddTaskViewController: UIViewController {
     
-    weak var delegate: AddTaskViewControllerDelegate!
+    private let realmManager = RealmManager()
     
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var detailTextField: UITextField!
@@ -29,12 +29,13 @@ class AddTaskViewController: UIViewController {
     }
  
     @IBAction func saveButtonPressed(_ sender: Any) {
-        var task: Task!
+        
         if let name = nameTextField.text, name.count > 0,
            let detail = detailTextField.text, detail.count > 0 {
-            task = Task(title: name, detail: detail, isDone: false)}
-        delegate?.addNewTask(task: task!)
+           
+            realmManager.saveTask(title: name, detail: detail, isDone: false)
         navigationController?.popViewController(animated: true)
         
     }
+}
 }

@@ -13,16 +13,30 @@ class ViewController: UIViewController, AddTaskViewControllerDelegate  {
     @IBOutlet weak var itemsTableView: UITableView!
     
     var tasks = [Task]()
+    private let realmManager = RealmManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTable()
-        
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+       super.viewWillAppear(animated)
+        readData()
+    }
+    
+    func readData() {
+        tasks = realmManager.getTask()
+        itemsTableView.reloadData()
+    }
+    
+    func deleteData(indexPath: IndexPath) {
+        realmManager.deleteTask(id: tasks[indexPath.row].id)
+    }
+    
     
     @IBAction func addButtonPressed(_ sender: Any) {
         guard let destination = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddTaskViewController") as? AddTaskViewController  else { return }
-        destination.delegate = self
         navigationController?.pushViewController(destination, animated: true)
     }
     
@@ -67,6 +81,7 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction(style: .normal, title: "delete") { _, _, completion in
             self.tasks.remove(at: indexPath.row)
+            self.deleteData(indexPath: indexPath)
             self.itemsTableView.reloadData()
             completion(true)
         }
